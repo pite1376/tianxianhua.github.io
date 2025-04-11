@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>田先花 - AI内容创作与智能体开发专家</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        },
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        * {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        
+        .project-card {
+            transition: all 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .section-fade {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .section-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: -23px;
+            top: 14px;
+            bottom: 0;
+            width: 2px;
+            background-color: currentColor;
+            opacity: 0.3;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-item::before {
+                left: -25px;
+            }
+            
+            .timeline-line {
+                left: -19px;
+            }
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1;
+        }
+/* 隐藏模态框内容的滚动条但保持滚动功能 */
+.modal-content-wrapper {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 20px; /* 为隐藏的滚动条预留空间 */
+    margin-right: -20px; /* 负边距抵消padding */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.modal-content-wrapper::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none; /* Chrome, Safari, Opera */
+}
+
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <!-- 导航栏 -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="font-bold text-xl text-primary-600 dark:text-primary-400">田先花</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">AI内容创作专家</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <a href="#about" class="hidden sm:block text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors">关于我</a>
+                <a href="#experience" class="hidden sm:block text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors">工作经历</a>
+                <a href="#projects" class="hidden sm:block text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors">项目经验</a>
+                <a href="#education" class="hidden sm:block text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors">教育背景</a>
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 个人介绍 -->
+        <section id="about" class="section-fade mb-16">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                    <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden">
+<img src='https://i.postimg.cc/0j4wTMZQ/20250411090017.jpg' border='0' alt="田先花头像" class="w-full h-full object-cover">
+                    </div>
+                                    <div class="flex-1">
+                        <h1 class="text-3xl sm:text-4xl font-bold mb-3">AI内容创作与智能体开发专家</h1>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm">AI智能体开发</span>
+                            <span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm">内容自动化</span>
+                            <span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 rounded-full text-sm">视觉设计</span>
+                            <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm">电商运营</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-user mr-3 text-primary-500"></i>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">姓名</span>
+                                    <p class="font-medium">田先花</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-birthday-cake mr-3 text-primary-500"></i>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">年龄</span>
+                                    <p class="font-medium">27岁</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-graduation-cap mr-3 text-primary-500"></i>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">学历</span>
+                                    <p class="font-medium">本科丨江西师范大学</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-briefcase mr-3 text-primary-500"></i>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">求职意向</span>
+                                    <p class="font-medium">智能体开发 / AI 内容创作</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-phone-alt mr-3 text-primary-500"></i>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">联系电话</span>
+                                    <p class="font-medium">15070759480</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope mr-3 text-primary-500"></i>
+                                <div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">邮箱</span>
+                                    <p class="font-medium">1491701061@qq.com</p>
+                                </div>
+                            </div>
+                        </div>                                      
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold mb-2">擅长技能</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span>Prompt提示词</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span>AI工作流设计</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span>Midjourney/即梦</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span>Coze工作流/应用开发</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span>内容创作与策划</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                      <p class="text-gray-700 dark:text-gray-300 mb-4">
+  5年电商设计转型 AI 实践内容专家。擅长整合 ChatGPT、Coze 、Midjourney等 AI 工具的协同应用，打造高效内容生产流程。<br>
+参与开发多个商用智能体。获得百度、字节跳动AI创新大奖，AI 视频作品入选央视展播。<br>
+致力于将 AI 从"工具"升级为"搭档"，为企业提供智能化内容解决方案。
+</p>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工作经历 -->
+        <section id="experience" class="section-fade mb-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <i class="fas fa-briefcase mr-3 text-primary-500 dark:text-primary-400"></i>
+                工作经历
+            </h2>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="relative pl-8 sm:pl-10">
+                    <div class="mb-8 relative timeline-item text-primary-600 dark:text-primary-400">
+                        <div class="timeline-line"></div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">上海晶大人造花有限公司</h3>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1 mb-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-user-tie mr-2 text-primary-500 dark:text-primary-400"></i>
+                                <span class="font-medium">AI应用实践负责人</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="far fa-calendar-alt mr-2 text-primary-500 dark:text-primary-400"></i>
+                                <span>2024年4月 - 2025年3月</span>
+                            </div>
+                        </div>
+                        
+                       <div class="space-y-3 text-gray-700 dark:text-gray-300">
+    <p><strong>AI驱动丨产品拍摄与陈列优化：</strong>主导AI辅助产品拍摄与陈列，实现拍摄前可视化预览，通过AI生成拍摄方案和陈列效果图，降低试错成本，提升拍摄效率30%，返工率降至5%</p>
+    <p><strong>AI生成丨产品空间场景化展示：</strong>负责利用MidJourney生成空间场景图，结合PS合成优化产品展示效果，解决传统场景受限、风格不匹配的问题，提升产品展示效果和用户空间感知。</p>
+    <p><strong>AI赋能丨新品策划：</strong>主导AI辅助商品内容策划全流程，完成新品系列命名、卖点提炼及详情页设计，为设计师提供框架。</p>
+    <p><strong>AI批量丨内容生成：</strong>飞书多维表格与DeepSeek结合，实现批量生成小红书内容、直播话术。</p>
+    <p><strong>AI客服丨评论话术：</strong>负责 AI 辅助评论话术生成模块，生成好评与差评回复，提升客服效率，优化客户满意度与店铺评分。</p>
+</div>                        
+                        <div class="flex flex-wrap gap-2 mt-4">
+<span class="font-medium text-red-500">点击查看详细工作内容：</span>
+<div class="flex flex-wrap gap-2 mt-4">
+    <a href="#" data-job="product-photo" class="text-primary-600 dark:text-primary-400 font-medium flex items-center border border-primary-300 dark:border-primary-700 rounded-md px-3 py-1.5 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+        <i class="fas fa-camera mr-1.5"></i> AI 驱动 | 产品拍摄与陈列设计(有案例)
+    </a>
+    <a href="#" data-job="product-scene" class="text-primary-600 dark:text-primary-400 font-medium flex items-center border border-primary-300 dark:border-primary-700 rounded-md px-3 py-1.5 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+        <i class="fas fa-cube mr-1.5"></i> AI 生成 | 产品空间场景化展示解决方案
+    </a>
+    <a href="#" data-job="product-planning" class="text-primary-600 dark:text-primary-400 font-medium flex items-center border border-primary-300 dark:border-primary-700 rounded-md px-3 py-1.5 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+        <i class="fas fa-tasks mr-1.5"></i> AI 赋能 | 新品策划
+    </a>
+    <a href="#" data-job="xiaohongshu" class="text-primary-600 dark:text-primary-400 font-medium flex items-center border border-primary-300 dark:border-primary-700 rounded-md px-3 py-1.5 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+        <i class="fas fa-file-alt mr-1.5"></i> AI 批量 | 飞书+Deepseek 内容批量生成
+    </a>
+    <a href="#" data-job="comments" class="text-primary-600 dark:text-primary-400 font-medium flex items-center border border-primary-300 dark:border-primary-700 rounded-md px-3 py-1.5 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
+        <i class="fas fa-comments mr-1.5"></i> AI 客服 | 评论话术系统
+    </a>
+</div>
+</div>
+    </div>
+                    <div class="relative timeline-item text-primary-600 dark:text-primary-400">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">上海晶大人造花有限公司</h3>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1 mb-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-paint-brush mr-2 text-primary-500 dark:text-primary-400"></i>
+                                <span class="font-medium">电商视觉设计师</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="far fa-calendar-alt mr-2 text-primary-500 dark:text-primary-400"></i>
+                                <span>2019年9月 - 2024年3月</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3 text-gray-700 dark:text-gray-300">
+                        <p><strong>电商视觉设计：</strong>负责电商平台淘宝首页、详情页、活动页的视觉设计</p>
+    <p><strong>产品上架运营：</strong>独立完成产品拍摄、及上架前端，协同运营制定爆款策略</p>
+</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 项目经验 -->
+        <section id="projects" class="section-fade mb-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <i class="fas fa-project-diagram mr-3 text-primary-500 dark:text-primary-400"></i>
+                项目经验
+            </h2>
+            
+            <!-- 智能体项目 -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">智能体项目</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- 项目1 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="project1">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">小红书珠宝运营 AI 小程序（进行中）</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">商业项目</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">为珠宝品牌打造一站式内容运营AI解决方案，实现从内容创作到运营流程，包括生成小红书人设笔记、账号选题，爆文仿写，以及部署到微信私域的机器人，负责私域问答和群。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">扣子应用</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">内容运营</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">工作流设计</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-user-tie mr-1"></i> 珠宝行业专属
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <!-- 项目2 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="project2">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">香港保险内容创作智能体</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">商业项目</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">为香港保险从业者设计的智能内容助手，支持小红书个人IP打造与内容规模化生产，结合行业合规要求，助力从业者高效获客与私域沉淀。 </p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">产品设计</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">工作流搭建</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">内容策划</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-user-tie mr-1"></i> 个人IP孵化
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <!-- 项目3 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="project3">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">内容运营助手</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">获奖作品</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">为B端商家和个人创作者解决小红书、抖音内容运营痛点，提供账号定位、选题推荐、爆款内容生成的一站式AI助手。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">扣子</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">内容创作</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">比赛作品</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-award mr-1"></i> 扣子官方二等奖
+                            </span>
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-thumbs-up mr-1"></i> 扣子官方商城上架
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <!-- 项目4 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="project4">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">情感漂流瓶智能体</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">获奖作品</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">基于百度文心大模型构建情感交流智能体，让用户匿名倾诉心声并获得共鸣回复。入选百度智能体七夕特别活动。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">文心大模型</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">情感交流</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">角色设计</span>
+                        </div>
+                        <div class="flex items-center flex-wrap gap-2">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-star mr-1"></i> 百度官方活动入选
+                            </span>
+<span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                 <i class="fas fa-user-tie mr-1"></i> 受邀百度分享嘉宾
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <!-- 项目5 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="project5">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">职业规划导师 (1v1版)</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">获奖作品</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">研发一对一职业规划对话智能体，提供个性化生涯建议。上线后获得163名用户使用、累计3k+对话交流，斩获火山引擎创新奖。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                                                        <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">职业规划</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">智能对话</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">项目统筹</span>
+                        </div>
+                        <div class="flex items-center flex-wrap gap-2">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-award mr-1"></i> 火山引擎创新奖
+                            </span>
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-users mr-1"></i> 3k+用户对话
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <!-- 项目6 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="project6">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">小红书爆款文案生成工具</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">获奖作品</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">开发"专家定制，必出爆款"文案智能体，提供一键生成热门小红书文案的能力。上线后累计2.7k次使用、13.1k次对话。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">小红书</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">文案生成</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">扣子三等奖</span>
+                        </div>
+                        <div class="flex items-center flex-wrap gap-2">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-award mr-1"></i> 扣子官方三等奖
+                            </span>
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-users mr-1"></i> 13.1k次对话
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+                    
+                    <!-- 茶馆项目 - 统一样式 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="project7">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">角色扮演：「这个茶馆不一般」</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">高用户参与</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">打造沉浸式对话智能体，模拟茶馆老板与用户互动交流。产品上线首日吸引1k+用户，点击量破4k；两天内累计使用2.7k人次。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">角色扮演类智能体</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">沉浸式体验</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">用户互动</span>
+                        </div>
+                        <div class="flex items-center flex-wrap gap-2">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-users mr-1"></i> 2.7k人次使用
+                            </span>
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mr-2">
+                                <i class="fas fa-user-tie mr-1"></i> 连上2天官方热推
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="https://swwwbhcs62f.feishu.cn/wiki/LGTgwQucnik0spk6vGRcnGHBn6d" target="_blank" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI视频项目 - 统一样式与智能体项目 -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">AI视频项目</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- 视频项目1 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="video1">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">《阿尔滋海默症》</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">央视展播</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">参与AI春晚《阿尔兹海默症》节目项目统筹，共同构建记忆场景，项目成果包括在AI春晚亮相及央视全国展播，探索了AI技术在医疗人文关怀领域的应用。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">AI艺术节</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">节目统筹</span>
+                        </div>
+                        <div class="flex items-center flex-wrap gap-2">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                <i class="fas fa-tv mr-1"></i> 央视展播
+                            </span>
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                <i class="fas fa-user-tie mr-1"></i> 项目统筹
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <!-- 视频项目2 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="video2">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">《幻太白·逆转》</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">优秀奖</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">AI视觉创意大赛优秀奖作品，负责AI出图工作。通过创新视觉表达手法，展现传统诗词的现代解读。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">AI出图</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">视觉创意</span>
+                        </div>
+                        <div class="flex items-center flex-wrap gap-2">
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">
+                                <i class="fas fa-award mr-1"></i> 优秀奖
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <!-- 视频项目3 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="video3">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">《离谱村》</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">AI春晚</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">参与了AI春晚《离谱村》IP的AIGC创意喜剧项目PS技术支持，负责AI图像生成与处理工作，探索了AI技术在文化娱乐领域的创新应用。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">AI出图</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">IP设计</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                <i class="fas fa-calendar-star mr-1"></i> AI春晚官方节目
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频项目4-->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="video4">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">《AI春晚IP设计》</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">AI春晚</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">参与AI春晚IP设计，设计了一系列独特的吉祥物与IP角色，打造既能体现中国传统节日氛围，又能展现科技创新精神的IP形象与视觉元素，为观众带来耳目一新的视觉盛宴。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">AI出图</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">IP设计</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                <i class="fas fa-calendar-star mr-1"></i> AI春晚官方节目
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 其他项目 -->
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">其他项目</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- 其他项目1 -->
+                    <div class="project-card bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer" data-project="other1">
+                        <div class="flex items-start justify-between mb-3">
+                            <h4 class="text-lg font-semibold">微信机器人项目</h4>
+                            <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-1 rounded-full">前20名</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">参加国内最大社区Way to AGI"谁是真人"机器人比赛，在400多个机器人中脱颖而出，获得前20名。设计了高度拟人化的对话策略和个性特征。</p>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">微信机器人</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">Way to AGI</span>
+                            <span class="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">比赛</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="badge bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                <i class="fas fa-trophy mr-1"></i> 前20名（400+参赛者）
+                            </span>
+                        </div>
+                        <div class="mt-3 text-right">
+                            <a href="#" class="text-primary-600 dark:text-primary-400 text-sm font-medium hover:underline">查看详情 →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 项目详情模态框 -->
+    <div id="project-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4">
+            <div class="sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center z-10">
+                <h3 id="modal-title" class="text-xl font-bold"></h3>
+                <button id="close-modal" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content-wrapper">
+    <div id="modal-content" class="p-6"></div>
+</div>
+
+        </div>
+    </div>
+    
+    <!-- 工作详情模态框 -->
+    <div id="job-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4">
+            <div class="sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center z-10">
+                <h3 id="job-modal-title" class="text-xl font-bold"></h3>
+                <button id="close-job-modal" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content-wrapper">
+    <div id="job-modal-content" class="p-6"></div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- 页脚 - 添加微信二维码 -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">田先花</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">AI内容创作与智能体开发专家</p>
+                </div>
+               
+                
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="weixin://dl/chat?tianxianhua" class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                        <i class="fab fa-weixin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                © 2025 田先花. 保留所有权利.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // 检查系统偏好
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+        
+        // 滚动动画
+        const sections = document.querySelectorAll('.section-fade');
+        
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+        
+        // 项目详情模态框
+        const projectModal = document.getElementById('project-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+        const projectCards = document.querySelectorAll('.project-card');
+        
+        // 工作详情模态框
+        const jobModal = document.getElementById('job-modal');
+        const jobModalTitle = document.getElementById('job-modal-title');
+        const jobModalContent = document.getElementById('job-modal-content');
+        const closeJobModal = document.getElementById('close-job-modal');
+        const jobButtons = document.querySelectorAll('[data-job]');
+        
+        // 项目详情数据 - 确保每个项目都有内容
+        const projectDetails = {
+            project1: {
+                title: "小红书珠宝运营 AI 小程序",
+                content: `
+                    <div class="mb-6">
+
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">基于扣子平台开发珠宝行业内容运营AI小程序，实现从内容创作到管理的全流程自动化，包括生成小红书创作文案、爆文仿写和评论分析，以及部署到微信私域的群聊总结机器人，负责私域问答和群聊消息总结。</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">核心职责</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li><strong>工作流搭建：</strong>
+                                    <ul class="list-disc list-inside ml-6 mt-1">
+                                        <li>构建小红书文案自动生成流程，支持多种笔记结构（如观点输出型、时间线式、故事引入型）和人设类型（如卖家、博主、行业专家、设计师、消费者）</li>
+                                        <li>开发抖音账号内容分析工作流，支持读取链接并以11个维度输出结构化数据</li>
+                                        <li>构建爆款内容二次创作流程，辅助内容创意再生成</li>
+                                    </ul>
+                                </li>
+                                <li><strong>知识库搭建：</strong> 梳理珠宝行业产品与营销知识，构建结构化知识库，为文案与问答提供数据支撑</li>
+                                <li><strong>应用界面设计与开发：</strong> 设计并搭建小程序端的用户交互界面，确保工作流配置与执行的便捷性</li>
+     
+                                <li><strong>引流型微信机器人SOP设计：</strong> 编写引流型微信机器人的交付流程设计与SOP，涵盖用户咨询、数据收集、机器人回复、多轮对话、人工转接、知识库管理、客户反馈、培训支持等模块</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>小程序正在进入上线阶段，并作为企业培训场景的展示案例</li>
+                                <li>完成引流型微信机器人的交付流程设计与SOP</li>
+                            </ul>
+                        </div>
+                        
+                       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+  <div class="rounded-lg overflow-hidden">
+    <a target='_blank'>
+      <img class="w-full h-auto" src='https://i.postimg.cc/mDTz1SxT/image-2.png' border='0' alt='image-2'/>
+    </a>
+  </div>
+  
+  <div class="rounded-lg overflow-hidden">
+    <a  target='_blank'>
+      <img class="w-full h-auto" src='https://i.postimg.cc/fLHLtnjv/image-3.png' border='0' alt='image-3'/>
+    </a>
+  </div>
+  
+  <div class="rounded-lg overflow-hidden">
+    <a target='_blank'>
+      <img class="w-full h-auto" src='https://i.postimg.cc/vBSY87bq/image-4.png' border='0' alt='image-4'/>
+    </a>
+  </div>
+  
+  <div class="rounded-lg overflow-hidden">
+    <a  target='_blank'>
+      <img class="w-full h-auto" src='https://i.postimg.cc/DwF8MgZL/image-5.png' border='0' alt='image-5'/>
+    </a>
+  </div>
+</div>
+
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+                        project2: {
+                title: "香港保险内容创作智能体",
+                content: ` 
+                            <div class="rounded-lg overflow-hidden mb-6">
+ <a>
+        <img src='https://i.postimg.cc/rmxqnwnw/1.png' border='0' alt='1' class="w-full h-auto object-cover" />
+    </a>
+</div>
+    <h4 class="text-lg font-semibold mb-3">项目背景</h4>
+    <p class="text-gray-700 dark:text-gray-300">为一位香港保险从业者打造基于扣子平台的智能内容创作助手，支持其在小红书上建立个人自媒体账号，实现内容创作自动化与规模化。该智能体涵盖从人设定位到内容选题、图文生成、爆款内容二创的完整流程。</p>
+</div>
+
+<div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">主要职责</h4>
+    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700 dark:text-gray-300">
+        <li>负责市场调研与竞品分析，统筹产品功能架构与交互流程设计</li>
+        <li>统一变量命名与工作流框架，搭建智能体整体逻辑</li>
+        <li>设计并搭建三大核心工作流：
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li><strong>人设定位工作流：</strong> 根据用户信息与对标账号分析，输出包括人设、内容、视觉体系、差异化分析等内容的人设定位方案（表格化呈现）</li>
+                <li><strong>内容选题工作流：</strong> 基于人设、受众、平台热点与对标账号，构建包含常规/热点选题、流量密码拆解、风险指南、选题测试在内的爆款选题库内容</li>
+                <li><strong>爆款内容二创工作流：</strong> 基于抖音对标链接及用户产品信息，提取优质内容框架，结合自定义变量与插件输出短视频剧本与分镜脚本</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">成果亮点</h4>
+    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700 dark:text-gray-300">
+        <li>搭建全流程内容智能体，实现内容策划自动化</li>
+        <li>输出结构化内容模板与爆款选题库</li>
+    </ul>
+</div>
+
+<div class="rounded-lg overflow-hidden mt-4">
+   <a   target='_blank'><img src='https://i.postimg.cc/WbWhdvwm/20250411081139.png' border='0' alt='20250411081139'/></a>
+</div>
+
+<div class="rounded-lg overflow-hidden mt-4">
+<a  target='_blank'><img src='https://i.postimg.cc/QxWRTgp6/20250411081148.png' border='0' alt='20250411081148'/></a>
+</div>
+
+<div class="rounded-lg overflow-hidden mt-4">
+<a   target='_blank'><img src='https://i.postimg.cc/zfpMrxrf/20250411081151.png' border='0' alt='20250411081151'/></a>
+</div>
+<div class="rounded-lg overflow-hidden mt-4">
+<a  target='_blank'><img src='https://i.postimg.cc/MTCgPvw0/20250411081157.png' border='0' alt='20250411081157'/></a>
+</div>
+<div class="rounded-lg overflow-hidden mt-4">
+<a  target='_blank'><img src='https://i.postimg.cc/3RXkN0tW/20250411081123.png' border='0' alt='20250411081123'/></a>
+</div>
+
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            project3: {
+                title: "内容运营助手",
+                content: `
+                    <div class="mb-6">
+<a  target='_blank'><img src='https://i.postimg.cc/yY4WCxdG/20250411081547.jpg' border='0' alt='20250411081547'/></a></div>
+    <h4 class="text-lg font-semibold mb-3">项目背景</h4>
+    <p class="text-gray-700 dark:text-gray-300 mb-3">针对B端商家和个人自媒体运营者在小红书、抖音等内容平台的运营痛点，开发了一款全流程AI内容运营助手，提供：</p>
+    <ul class="list-none space-y-2 text-gray-700 dark:text-gray-300 mb-3">
+        <li>✅ 账号人设定位 → 运营规划 → 选题推荐 → 爆款内容生成 的一站式解决方案</li>
+        <li>✅ 解决用户不会定位账号、缺乏选题灵感、内容创作效率低等问题</li>
+        <li>✅ 适用于：
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li>B端商家：需要在小红书/抖音推广产品，但不懂内容运营</li>
+                <li>个人创作者：想做自媒体副业，但缺乏运营经验</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">核心职责</h4>
+    <ol class="list-decimal list-outside ml-5 space-y-4 text-gray-700 dark:text-gray-300">
+        <li><strong>产品流程规划</strong>
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li>设计内容运营SOP，覆盖：
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                        <li>账号人设定位（通过互动问答分析用户特点，提供3种人设方案）</li>
+                        <li>选题推荐（基于行业热点&竞品分析）</li>
+                        <li>图文创作（生成标题+正文+标签+配图建议）</li>
+                        <li>爆款二创（对标爆款视频，生成改编脚本）</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><strong>智能体工作流搭建</strong>
+            <p class="mt-2 mb-2">搭建1个核心AI工作流，实现自动化内容生产：</p>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b border-gray-300 dark:border-gray-700 text-left">工作流</th>
+                            <th class="py-2 px-4 border-b border-gray-300 dark:border-gray-700 text-left">功能</th>
+                            <th class="py-2 px-4 border-b border-gray-300 dark:border-gray-700 text-left">输出</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">1. 人设定位</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">通过互动问答的方式，基于用户背景、偏好</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">输出：账号定位、人设、账号运营方案</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">2. 选题推荐</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">通过互动问答，基于用户特点、倾向、更新频率</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">输出：选题库</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">3. 小红书创作</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">根据用户创作的领域、主题、产品特点、字数</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">输出：标题、内容正文、标签、封面图与配图的建议</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">4. 爆款二创（我搭建）</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">输入 对标的短视频链接，自己的商品信息以及需求</td>
+                            <td class="py-2 px-4 border-b border-gray-300 dark:border-gray-700">输出：对应短视频脚本</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">实施路径</h4>
+    <ol class="list-decimal list-outside ml-5 space-y-2 text-gray-700 dark:text-gray-300">
+        <li>需求调研：分析B端商家&个人用户痛点（问卷+竞品分析）</li>
+        <li>流程设计：拆解内容生产链路，制定标准化SOP</li>
+        <li>工作流开发：
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li>人设定位：Q&A交互 → 生成3种人设方案</li>
+                <li>选题推荐：提供高热度选题（小红书/抖音）</li>
+                <li>小红书创作：生成标题+正文+标签+配图建议</li>
+                <li>爆款二创：对标爆款视频，生成改编脚本</li>
+            </ul>
+        </li>
+        <li>测试优化：
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li>验证各工作流衔接流畅度</li>
+                <li>优化AI生成内容的精准度</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">项目成果</h4>
+    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700 dark:text-gray-300">
+        <li>实现从账号定位到内容生成的全流程自动化，支持小红书/抖音平台</li>
+        <li>将内容创作时间从4-6小时缩短至30分钟</li>
+        <li>作品在扣子ShowMe官方赛事中荣获二等奖</li>
+        <li>成功上架扣子官方模板商城</li>
+    </ul>
+</div>
+                        <div class="rounded-lg overflow-hidden">
+                            <a ><img src='https://i.postimg.cc/tT5cD1Qb/e5865790-4d83-475c-83eb-24f71dcbf330.png' border='0' alt='e5865790-4d83-475c-83eb-24f71dcbf330'/></a> </div>
+ <div  class="rounded-lg overflow-hidden mt-4">
+                            <a><img src='https://i.postimg.cc/B698N65m/image.png' border='0' alt='image'/></a>
+                        </div>
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            project4: {
+                title: "情感漂流瓶智能体",
+                content: `
+                    <div class="mb-6">
+                         <div class="mb-8">     
+        <!-- 主图 - 完整展示 -->
+        <div class="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+            <img src='https://i.postimg.cc/cLXxMTvs/image.png' alt='情感漂流瓶' class="w-full object-contain">
+        </div>
+    </div>
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">基于百度文心大模型构建情感交流智能体，让用户匿名倾诉心声并获得共鸣回复。该项目旨在为用户提供一个安全、私密的情感宣泄渠道，同时通过AI的回应给予理解与支持。</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">核心功能</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li><strong>匿名倾诉：</strong> 用户可以匿名发送情感困扰，无需担心隐私泄露</li>
+                                <li><strong>情感识别：</strong> AI能够准确识别用户情绪状态，提供针对性回应</li>
+                                <li><strong>共情回复：</strong> 基于心理学原理，生成具有共情能力的回复内容</li>
+                                <li><strong>互动机制：</strong> 用户可以选择继续对话或结束交流，保持互动的灵活性</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">项目亮点</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>入选百度智能体七夕特别活动，获得官方推荐</li>
+                                <li>设计了独特的"漂流瓶"交互机制，增强用户体验的趣味性</li>
+                                <li>针对敏感话题设置了安全防护机制，确保平台健康</li>
+                                <li>用户反馈显示，AI回复的共情能力得到高度认可</li>
+                            </ul>
+                        </div>
+                           <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="rounded-lg overflow-hidden">
+                            <a target='_blank'><img src='https://i.postimg.cc/k4v3VJnV/image-1.png' border='0' alt='image-1'/></a></div>
+    <div class="rounded-lg overflow-hidden">
+		<a target='_blank'><img src='https://i.postimg.cc/gJWbkXPF/output-1.png' border='0' alt='output-1'/></a>
+                        </div></div>
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            project5: {
+                title: "职业规划导师 (1v1版)",
+                content: `
+<div class="mb-6">
+<a  target='_blank'><img src='https://i.postimg.cc/qvpWjcBk/image-1.png' border='0' alt='image-1'/></a></div>                   
+ <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">工作几年来，我一直在反思自己缺乏系统职业规划的经历，认识到"走一步看一步"的职业态度存在局限性。弟弟即将面临大学毕业求职时，我希望他能避开我曾经的迷茫。恰逢Coze平台举办智能体创作大赛，我联合朋友，发起并主导开发了"职业规划1v1（校招版）"智能体项目。</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">主要功能</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li><strong>项目统筹与产品设计：</strong>作为项目发起者，负责整体项目规划、需求分析和产品流程设计，确定了从性格测试到职业漫画的完整用户体验路径</li>
+   <li><strong>工作流搭建：</strong>设计并实现了包含初始化、职业规划、职业漫画工作流</li>
+   <li><strong>交互内容创作：</strong>撰写开场白、测试问题、以及各环节交互消息，确保用户体验的连贯性</li>
+   <li><strong>变量系统设计：</strong>设计了完整的变量存储和调用机制，实现用户信息的有效记录</li>
+   <li><strong>用户体验优化：</strong>通过卡片式界面、按钮交互和分步引导，提升用户使用体验和参与度</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li><strong>获奖认可：</strong>获得扣子官方3等奖和智纪比赛2等奖，证明项目的创新性和实用价值</li>
+<li><strong>用户使用：</strong>累计对话3000+次</li>
+<li><strong>功能实现：</strong>成功实现了从性格测试到职业规划的全流程智能服务，包括：
+<li>收集并分析最新的职业就业岗位数据。</li>
+<li>根据用户教育背景和个人偏好，推荐合适的职业岗位。</li>
+<li>制定个性化的短期、中期、长期职业发展计划。</li>
+<li>推荐市面上相关的工作岗位和实习机会。</li>
+<li>提供职业发展相关的资源和指导。</li>
+<li>通过彩蛋漫画模拟用户未来工作场景，增加互动性和趣味性。
+</li>
+                            </ul>
+                        </div>
+                       
+<div class="flex justify-center mb-4">
+  <a target='_blank'><img class="rounded-lg" src='https://i.postimg.cc/QdcJzvt5/6b36ffeb9b116190d07f71e0c2a7899.png' border='0' alt='6b36ffeb9b116190d07f71e0c2a7899'/></a>
+</div>
+<div class="flex justify-center mb-4">
+<a  target='_blank'><img src='https://i.postimg.cc/05S5zJk8/image-3.png' border='0' alt='image-3'/></a>
+  <a target='_blank'><img class="rounded-lg ml-2" src='https://i.postimg.cc/cHL7rHcM/image-4.png' border='0' alt='image-4'/></a>
+</div>
+<div class="flex justify-center mb-4">
+  <a target='_blank'><img class="rounded-lg mr-2" src='https://i.postimg.cc/zGMSV5c9/image-5.png' border='0' alt='image-5'/></a>
+  <a target='_blank'><img class="rounded-lg ml-2" src='https://i.postimg.cc/HswfwvgZ/image-6.png' border='0' alt='image-6'/></a>
+</div>
+<div class="flex justify-center mb-4">
+  <a target='_blank'><img class="rounded-lg mr-2" src='https://i.postimg.cc/CLg2xCqj/image-7.png' border='0' alt='image-7'/></a>
+  <a target='_blank'><img class="rounded-lg ml-2" src='https://i.postimg.cc/vmV7nkRD/image-8.png' border='0' alt='image-8'/></a>
+</div>
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            project6: {
+                title: "小红书爆款文案生成工具",
+                content: `
+                    <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">参加Coze平台官方实用赛道比赛，开发了一款面向小红书创作者群体的AI文案助手，解决创作者在内容创作中遇到的创意枯竭、效率低下等痛点问题。</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">核心功能</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li>负责Bot交互体验设计，包括开场白和全流程对话话术的设计与撰写</li>
+<li>参与设计了"小懒"和"大聪明"两种人设模式的交互逻辑</li>
+<li>参与整合并优化工作流，确保Bot响应的流畅性和专业性</li>
+<li>参与Bot整体功能架构设计和用户体验优化</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">项目成果</h4>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- 左侧：功能模块 -->
+        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+            <h5 class="font-medium text-primary-600 dark:text-primary-400 mb-3">核心功能模块</h5>
+            <ul class="space-y-3">
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 dark:text-gray-300">一键生成小红书文案</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 dark:text-gray-300">热点话题推荐与灵感激发</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 dark:text-gray-300">文案优化与改写</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700 dark:text-gray-300">链接内容一键转化为文案</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 右侧：数据成就 -->
+        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+            <h5 class="font-medium text-primary-600 dark:text-primary-400 mb-3">项目成就</h5>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">扣子平台比赛</div>
+                        <div class="font-medium">获得三等奖</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">累计使用次数</div>
+                        <div class="font-medium">2.7k 次</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mr-4 flex-shrink-0">
+                        <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">对话总数</div>
+                        <div class="font-medium">13.1k 次</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-100 dark:border-blue-800/30">
+        <div class="flex items-start">
+            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <p class="text-gray-700 dark:text-gray-300">
+                <span class="font-medium">成为扣子平台上最受欢迎的内容创作工具之一</span>，获得用户高度评价，持续保持平台热门推荐位置。
+            </p>
+        </div>
+    </div>
+</div>
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+    <div class="rounded-lg overflow-hidden">
+        <a target='_blank'><img src='https://i.postimg.cc/3xxZd60J/image-6.png' border='0' alt='image-6'/></a>
+    </div>
+    <div class="rounded-lg overflow-hidden">
+        <a  target='_blank'><img src='https://i.postimg.cc/VNSBFCFx/image-7.png' border='0' alt='image-7'/></a>
+        </a>
+    </div>
+</div>
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            project7: {
+                title: "角色扮演：「这个茶馆不一般」",
+                content: `
+                    <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">打造沉浸式对话智能体，模拟茶馆老板与用户互动交流。创造一个虚拟的江湖茶馆场景，让用户体验古风对话的乐趣，同时探索角色扮演类AI的沉浸式体验设计。</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">设计亮点</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li><strong>角色塑造：</strong> 精心设计茶馆老板的性格、语言风格和背景故事</li>
+                                <li><strong>场景构建：</strong> 创建了茶馆的环境描述和氛围营造</li>
+                                <li><strong>互动机制：</strong> 设计多种互动路径，包括品茶、聊天、听故事等</li>
+                                <li><strong>知识融合：</strong> 融入茶文化知识和江湖趣闻，增加对话深度</li>
+                                <li><strong>情绪识别：</strong> 智能识别用户情绪，提供相应的对话回应</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-2">用户反响</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>产品上线首日吸引1k+用户，点击量破4k</li>
+                                <li>两天内累计使用2.7k人次</li>
+                                <li>连续2天获得官方热门推荐</li>
+                            </ul>
+                        </div>
+                        
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+
+                        <div class="flex gap-4 mt-6">
+  <div class="w-1/2">
+    <div class="rounded-lg overflow-hidden">
+      <img class="w-full h-auto" src='https://i.postimg.cc/Y0kzDkBw/9b9027a1-64ae-4279-b404-21cca18e3d74.png' alt='左侧图片'/>
+    </div>
+  </div>
+  <div class="w-1/2">
+    <div class="rounded-lg overflow-hidden">
+      <img class="w-full h-auto" src='https://i.postimg.cc/zG3Sc063/3710de63-8a64-48d3-ac2c-cea869752cb7.png' alt='右侧图片'/>
+    </div>
+  </div>
+</div>
+                    </div>
+                `
+            },
+            video1: {
+                title: "《阿尔滋海默症》节目",
+                content: `
+                    <div class="space-y-6">
+                       <a  target='_blank'><img src='https://i.postimg.cc/5yWP9LR6/1744291171910.png' border='0' alt='1744291171910'/></a>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">本项目最初作为AI春晚的创新节目，后被选入首届共尔AI艺术节，在中央电视台(CCTV)进行全国展播。</p>
+<p class="text-gray-700 dark:text-gray-300">项目以"阿尔兹海默"为主题，灵感源自阿尔兹海默症患者及其家人的真实经历，旨在通过AIGC技术构建梦幻与现实并存的记忆场景，探索AI技术在医疗人文关怀领域的创新应用。</p>
+<p class="text-gray-700 dark:text-gray-300">项目联合幸福海马等专业机构，运用数字人技术和AI护理方案，表达"即便在遗忘的深处，记忆仍闪烁着爱的微光"这一情感主题，唤起人们对记忆和亲情的珍视。</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">核心职责</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mt-2">
+                                <li>担任项目统筹协调人，推动项目从零到一的落地。</li>
+<li>负责项目从AI春晚到央视共尔AI艺术节的升级与适配工作。</li>
+<li>把控作品制作全流程，确保作品既有艺术表现力，又能传递希望与温暖。</li>
+                            </ul>
+                        </div>
+                        
+                       <div>
+    <h4 class="text-lg font-semibold mb-2">实施路径</h4>
+    <div class="mb-3">
+        <p class="font-bold mb-1">创意孵化阶段：</p>
+        <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+            <li>深入研究阿尔兹海默症患者的心理状态与家庭关系</li>
+            <li>确定以"记忆场景重建"为核心的视觉表现手法</li>
+            <li>构建"遗忘中的爱"情感主线</li>
+        </ul>
+    </div>
+    
+    <div class="mb-3">
+        <p class="font-bold mb-1">资源整合与团队组建：</p>
+        <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+            <li>联合幸福海马等专业机构提供医疗咨询</li>
+            <li>组建AIGC技术团队，专注于记忆场景的视觉重建</li>
+        </ul>
+    </div>
+    
+    <div class="mb-3">
+        <p class="font-bold mb-1">技术与内容创作：</p>
+        <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+            <li>收集阿尔兹海默症患者的真实故事与老照片</li>
+            <li>应用AIGC技术构建梦幻与现实并存的记忆场景</li>
+        </ul>
+    </div>
+    
+    <div class="mb-3">
+        <p class="font-bold mb-1">作品升级与展播准备：</p>
+        <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 ml-4">
+            <li>根据AI春晚反馈优化内容与技术表现</li>
+            <li>提升作品制作质量，适配央视展播标准</li>
+            <li>强化"科技如何为爱留下永恒印记"的主题表达</li>
+        </ul>
+    </div>
+</div>
+
+                        
+                    <div>
+    <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+    
+    <p class="text-gray-700 dark:text-gray-300 mb-3">
+       <strong>双重展播成就：</strong>作品先在AI春晚亮相获得好评，后成功入选首届共尔AI艺术节，在央视平台进行全国展播
+    </p>
+    <p class="text-gray-700 dark:text-gray-300 mb-3">
+      <strong>情感与技术双重突破：</strong>成功将AIGC技术应用于情感表达，构建出梦幻与现实并存的记忆场景，为观众带来视觉与情感的双重震撼
+    </p>
+</div>
+
+                        <div>
+                           <a  target='_blank'><img src='https://i.postimg.cc/k5Rqp9Ny/f47bd0b3ba7d1e86ac66a78d1cb4bd9.jpg' border='0' alt='f47bd0b3ba7d1e86ac66a78d1cb4bd9'/></a>
+                        </div>
+<div class="mt-6 text-center">
+                            <a href="https://5gai.cctv.com/2025/03/26/VIDEeceKfVTmB6Ku2X1i4jaR250326.shtml"   target="_blank" rel="noopener noreferrer"    class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+    查看完整项目详情
+    <i class="fas fa-external-link-alt ml-2"></i>
+</a>
+
+                        </div>
+                    </div>
+                `
+            },
+            video2: {
+                title: "《幻太白·逆转》",
+                content: `
+                    <div class="space-y-6">
+                        <a   target='_blank'><img src='https://i.postimg.cc/W1k0TnKV/1744290457465.png' border='0' alt='1744290457465'/></a>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">参与制作古装科幻短剧《幻太白·逆转》，该剧是对李白经典IP的创新改编，融合了传统文化与科幻元素。剧情围绕李白在宫廷遭遇挫折后，发现并掌握"钴星银"科技，最终凭借技术实力获得朝廷重视的故事展开。项目通过AI技术实现视觉创新，展现传统文化与未来科技的碰撞美学。</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">我的职责</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li>负责AI出图工作，包括提示词设计与优化</li>
+                                <li>诗词意象的视觉转化与艺术表达</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">创作特点</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>将李白诗词中的意象转化为现代视觉元素</li>
+                                <li>融合东方美学与西方视觉艺术表现手法</li>
+                                <li>通过色彩、构图和光影表达诗词的情感层次</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>在AI视觉创意大赛中荣获优秀奖</li>
+                                <li>获得评委对视觉创意与文化融合的高度评价</li>
+                            </ul>
+                        </div>
+                         <div class="mt-6 text-center">
+                            <a href="https://www.bilibili.com/video/BV1fTskevENP/?spm_id_from=333.337.search-card.all.click&vd_source=1c64d3f3c18f48e509c417315f4b0f15" target="_blank"  class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            video3: {
+                title: "《离谱村》",
+                content: `
+                    <div class="space-y-6">
+                        <a  target='_blank'><img src='https://i.postimg.cc/x8CCsfH5/20250411002702.png' border='0' alt='20250411002702'/></a>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">《离谱村》是一部参与AI春晚的喜剧节目，通过AI技术创造出一个充满奇思妙想的乡村世界。项目融合了中国传统喜剧元素与现代网络文化，打造出独特的视觉风格与叙事方式。</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">我的职责</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li>担任项目PS技术支持，负责AI图像生成与处理工作</li>
+ <li>开发具有中国特色的乡村喜剧视觉风格</li>
+ <li>确保AI生成角色的一致性与连贯性</li>
+ <li>参与《离谱村》视觉风格的设计与实现</li>
+                            </ul>
+                        </div>
+                       
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>成功入选AI春晚官方节目</li>
+<li>获得观众对视觉创意的积极评价</li>
+<li>作品在社交媒体获得广泛传播</li>
+                            </ul>
+                        </div>
+                        
+                        <div >
+                            <img src='https://i.postimg.cc/d0NGmVhs/20250411002724.png' border='0' alt='20250411002724'/></a><br /><a href='https://postimages.org/'><img src='https://i.postimg.cc/t4MhFgZX/20250411004934.png' border='0' alt='20250411004934'/>                        </div>
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            video4: {
+                title: "《AI春晚IP设计》",
+                content: `
+                    <div class="space-y-6">
+<div class="rounded-lg overflow-hidden">
+                    <a   target='_blank'><img src='https://i.postimg.cc/43WB4yvm/image-6.png' border='0' alt='image-6'/></a>
+                       </div>
+
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">参与设计 AI 春晚吉祥物与 IP 角色，包括主持人形象、节目角色和场景设计，打造统一而富有特色的视觉语言。该项目旨在通过AI技术创造具有中国传统春晚氛围又融合现代科技感的全新视觉体验。</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">设计内容</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li><strong>主持人形象：</strong> 参与设计了2位具有不同性格特点的AI虚拟主持人</li>
+                                <li><strong>场景设计：</strong> 打造了融合传统与未来感的舞台空间</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">设计理念</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>将中国传统春节元素与科技感进行创新融合</li>
+                                <li>通过角色设计体现多元文化与包容性</li>
+                                <li>运用色彩心理学，创造喜庆又现代的视觉体验</li>
+                                <li>保持角色形象的一致性与辨识度</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>设计的IP形象被全面应用于AI春晚的各个环节</li>
+                                <li>主持人形象在社交媒体引发广泛讨论与传播</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+                           <a  target='_blank' class="rounded-lg overflow-hidden" > <img src='https://i.postimg.cc/kXcKgKLZ/image-7.png' border='0' alt='image-7'/></a>
+<a  target='_blank' class="rounded-lg overflow-hidden" ><img src='https://i.postimg.cc/4NvJV15f/image-8.png' border='0' alt='image-8'/></a>
+                        </div>
+
+<div class="grid grid-cols-2 gap-4 mt-6">
+<a class="rounded-lg overflow-hidden" target='_blank'><img src='https://i.postimg.cc/kGXyssb0/image-9.png' border='0' alt='image-9'/></a>
+ <a  target='_blank'  class="rounded-lg overflow-hidden"><img src='https://i.postimg.cc/Kv9TSLK5/image-10.png' border='0' alt='image-10'/></a> 
+ </div>
+
+<div class="rounded-lg overflow-hidden">
+<img src='https://i.postimg.cc/Kjk6GtGg/image-11.png' border='0' alt='image-11'/>  </div>
+
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            other1: {
+                title: "微信机器人项目",
+                content: `
+                    <div class="space-y-6">
+                        <img src="https://images.unsplash.com/photo-1535303311164-664fc9ec6532?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80" alt="微信机器人项目" class="w-full h-64 object-cover rounded-lg mb-4">
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                            <p class="text-gray-700 dark:text-gray-300">参加国内最大社区Way to AGI"谁是真人"机器人比赛，在400多个机器人中脱颖而出，获得前20名。该比赛要求参赛者设计一个能够在对话中被误认为真人的AI机器人，考验AI的拟人化对话能力。</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">设计思路</h4>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                                <li><strong>角色塑造：</strong> 创建了一个25岁的平面设计师角色，设定了详细的性格特点、生活习惯和语言风格</li>
+                                <li><strong>对话策略：</strong> 设计了多层次的对话策略，包括主动提问、适当犹豫、偶尔改变话题等人类对话特征</li>
+                                <li><strong>情感表达：</strong> 加入了情绪波动、幽默感和个人观点，增强真实感</li>
+                                <li><strong>知识边界：</strong> 设定了角色的知识范围，对超出范围的问题会表现出合理的不确定性</li>
+                                <li><strong>语言特点：</strong> 融入了口头禅、网络流行语和专业术语，塑造鲜明个性</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">技术实现</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>在阿里云服务器部署</li>
+                                <li>设计了上下文记忆机制，保持对话的连贯性</li>
+                                <li>实现了话题引导与转换的自然过渡</li>
+                                <li>加入了打字延迟、表情符号使用等拟人化细节</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">比赛成果</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                                <li>在400多个参赛机器人中获得前20名的优异成绩</li>
+                                <li>有60%的测试者无法确定是否为真人</li>
+                                <li>获得评委对角色一致性和对话自然度的高度评价</li>
+                            </ul>
+                        </div>
+                        
+                       <div class="grid grid-cols-2 gap-4 mt-6">
+    <a href="#" target='_blank'>
+        <img src='https://i.postimg.cc/8cC1NT1Y/20250411005455.png' border='0' alt='20250411005455' class="w-full h-auto object-cover rounded-lg"/>
+    </a>
+    <a href="#" target='_blank'>
+        <img src='https://i.postimg.cc/rmj8BDLW/20250411005500.png' border='0' alt='20250411005500' class="w-full h-auto object-cover rounded-lg"/>
+    </a>
+</div>
+
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                `
+            }
+        };
+        // 工作详情数据
+// 工作详情数据
+const jobDetails = {
+    "product-photo": {
+        title: "AI 驱动 | 产品拍摄与陈列设计",
+        content: `
+         <div class="mb-6  rounded-lg overflow-hidden">
+   <a   target='_blank'><img src='https://i.postimg.cc/Hx69nNZr/20250411084440.png' border='0' alt='20250411084440'/></a>
+    </div>
+    <div class="mb-6">
+        <h4 class="text-lg font-semibold mb-3">项目背景</h4>
+        <p class="text-gray-700 dark:text-gray-300 mb-3">在前公司电商产品拍摄与店铺陈列工作中，关注到团队面临以下核心痛点：</p>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-3">
+            <li>产品拍摄缺乏标准化视觉指导，摄影师多次试错导致单品拍摄耗时3小时+</li>
+            <li>专业陈列师仅2人且成本高，无法满足月均100SKU的陈列需求。</li>
+            <li>沟通效率低下致使30%成片需返工，严重延误产品上新进度。</li>
+        </ul>
+        <p class="text-gray-700 dark:text-gray-300">为解决以上问题，我尝试用AI辅助产品拍摄与陈列优化项目。</p>
+    </div>
+    
+    <div class="mb-6">
+        <h4 class="text-lg font-semibold mb-3">核心职责</h4>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>主导AI图像生成与关键词设定工作</li>
+            <li>制定产品拍摄方案文档</li>
+            <li>协调拍摄团队完成实景搭建与执行</li>
+            <li>整合反馈并持续优化工作流程</li>
+        </ul>
+    </div>
+    
+   <div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">优化前后工作流程对比</h4>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+        <!-- 左侧：优化前 -->
+        <div class="bg-red-50 dark:bg-red-900/10 rounded-xl p-5 border border-red-100 dark:border-red-800/30">
+            <h5 class="font-medium text-gray-900 dark:text-white mb-3 flex items-center">
+                <span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                优化前
+            </h5>
+            <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>拍摄团队凭经验布景拍摄，缺乏明确视觉参考</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>领导审核成片后才能决定是否重拍，返工率高</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>陈列设计完全依赖专业陈列师，资源严重受限</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>多次试错导致时间和资源浪费</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 右侧：优化后 -->
+        <div class="bg-green-50 dark:bg-green-900/10 rounded-xl p-5 border border-green-100 dark:border-green-800/30">
+            <h5 class="font-medium text-gray-900 dark:text-white mb-3 flex items-center">
+                <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                优化后
+            </h5>
+            <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>使用MJ/即梦等工具，将产品转化为视觉参考</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>AI快速生成多个创意拍摄及陈列方案</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>领导提前审核确定创作方向，提高决策效率</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>拍摄团队按AI参考图执行，提高一次成功率</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>针对复杂场景协调陈列师介入优化</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    <div class="mb-6">
+        <h4 class="text-lg font-semibold mb-3">项目成果</h4>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>拍摄准备时间减少40%，单个产品拍摄时间从4小时缩短至2小时</li>
+            <li>拍摄返工率从30%降至5%，领导满意度提升65%</li>
+            <li>陈列效率提升50%，单个区域陈列时间从8小时缩短至4小时</li>
+            <li>实现非专业人员完成基础陈列工作，释放专业陈列师资源</li>
+        </ul>
+    </div>
+
+         <div class="mt-6">
+  <div class="flex justify-center mb-4">
+<a target='_blank'><img src='https://i.postimg.cc/GpbCZwcs/01.jpg' border='0' alt='01'/></a>
+  </div>
+  <div class="flex justify-center mb-4">
+<a   target='_blank'><img src='https://i.postimg.cc/44cX71Fy/02.jpg' border='0' alt='02'/></a>
+  </div>
+  <div class="flex justify-center mb-4">
+<a  target='_blank'><img src='https://i.postimg.cc/Z5SnKQbJ/03.jpg' border='0' alt='03'/></a>  </div>
+  <div class="flex justify-center mb-4">
+<a  target='_blank'><img src='https://i.postimg.cc/DzDKmWr1/04.jpg' border='0' alt='04'/></a>
+  </div>
+  <div class="flex justify-center mb-4">
+<a  target='_blank'><img src='https://i.postimg.cc/YqkB4BWD/05.jpg' border='0' alt='05'/></a>
+  </div>
+</div>
+
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+        `
+    },
+    "product-scene": {
+        title: "AI 生成 | 产品空间场景化展示解决方案",
+        content: `
+            <div class="space-y-6">
+                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="产品空间场景化展示" class="w-full h-64 object-cover rounded-lg mb-4">
+<div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">项目背景</h4>
+    <ul class="list-disc list-outside ml-5 text-gray-700 dark:text-gray-300 space-y-2 mb-3">
+      		  <li>前公司主营淘宝仿真花销售，产品体积大，实拍受场地限制，难以展现产品在多场景效果</li>
+		<li>传统场景合成方案存在素材场景匹配度低、版权风险高、风格混乱等问题</li>
+		<li>需要解决产品在不同空间场景中的展示效果问题</li>
+    </ul>
+    <p class="text-gray-700 dark:text-gray-300">使用MJ生成花艺空间设计方案，提供多样化场景展示，增强用户空间体验感知，加快购买决策转化</p>
+</div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">核心职责</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                        <li>主导AI场景生成应用：运用MJ生成定制化空间场景图</li>
+ 			<li>负责全链路视觉优化：从产品抠图到PS场景合成</li>
+			 <li>搭建场景素材库：创建6大风格体系（北欧/新中式/ins风等），覆盖多产品应用场景</li>
+                    </ul>
+                </div>
+		<div class="mb-6">
+  
+    
+    <div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">优化前后工作流程对比</h4>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+        <!-- 左侧：优化前 -->
+        <div class="bg-red-50 dark:bg-red-900/10 rounded-xl p-5 border border-red-100 dark:border-red-800/30">
+            <h5 class="font-medium text-gray-900 dark:text-white mb-3 flex items-center">
+                <span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                优化前
+            </h5>
+            <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>手动搜索网络场景图，耗时1-2小时</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>场景素材受限，难找合适素材</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>风格不统一，与产品不搭配</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>存在版权风险与水印问题</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>制作流程不规范</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 右侧：优化后 -->
+        <div class="bg-green-50 dark:bg-green-900/10 rounded-xl p-5 border border-green-100 dark:border-green-800/30">
+            <h5 class="font-medium text-gray-900 dark:text-white mb-3 flex items-center">
+                <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                优化后
+            </h5>
+            <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>使用MJ生成场景，平均约10分钟</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>分析产品定制场景，素材更丰富</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>风格可控，与产品更搭配</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>自主生成内容，降低版权风险</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>优化制作流程，提升工作效率</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                        <li>效率提升：场景图获取时间由1-2小时缩短至10分钟</li>
+			<li>质量提升：快速生成多种空间风格场景，丰富产品展示效果</li>
+			<li>风险规避：减少素材依赖，避免版权问题</li>
+			<li>业务增长：通过优化空间感知，提升用户购买决策，转化率提升30%</li>
+                    </ul>
+                </div>
+                
+         <div class="mt-6">
+  <div class="flex justify-center mb-4">
+    <a target='_blank'><img src='https://i.postimg.cc/qR0TpVgq/h-01.jpg' border='0' alt='h-01'/></a>
+  </div>
+  <div class="flex justify-center mb-4">
+    <a target='_blank'><img src='https://i.postimg.cc/8PsVpbkR/h-02.jpg' border='0' alt='h-02'/></a>
+  </div>
+  <div class="flex justify-center mb-4">
+    <a target='_blank'><img src='https://i.postimg.cc/W4cR7LG8/h-03.jpg' border='0' alt='h-03'/></a>
+  </div>
+  <div class="flex justify-center mb-4">
+    <a target='_blank'><img src='https://i.postimg.cc/qv3VnM3g/h-04.jpg' border='0' alt='h-04'/></a>
+  </div>
+  <div class="flex justify-center mb-4">
+    <a target='_blank'><img src='https://i.postimg.cc/BQyfX1td/h-05.jpg' border='0' alt='h-05'/></a>
+  </div>
+</div>
+
+
+
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+            </div>
+        `
+    },
+  "product-planning": {
+        title: "AI 赋能 | 新品策划",
+        content: `
+            <div class="space-y-8">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1426&q=80" alt="电商新品策划" class="w-full h-64 object-cover rounded-lg mb-6 shadow-md">
+                
+                <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg shadow-sm">
+                    <h4 class="text-xl font-semibold mb-3 text-primary-600 border-b pb-2">项目背景</h4>
+                    <p class="text-gray-700 dark:text-gray-300 mb-3">前公司主营仿真花，我发现在新品上架流程存在以下问题：</p>
+                    <ul class="list-none space-y-3 text-gray-700 dark:text-gray-300">
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 flex-shrink-0">!</span>
+                            <span><strong class="text-gray-900 dark:text-white">信息分散：</strong>产品参数（花型、材质、尺寸等）整理不规范</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 flex-shrink-0">!</span>
+                            <span><strong class="text-gray-900 dark:text-white">内容割裂：</strong>命名、卖点、详情页等环节缺乏统一标准，影响品牌调性</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 flex-shrink-0">!</span>
+                            <span><strong class="text-gray-900 dark:text-white">效率低下：</strong>设计师频繁返工，跨部门沟通成本高，新品上线周期延长</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-3 flex-shrink-0">!</span>
+                            <span><strong class="text-gray-900 dark:text-white">转化不足：</strong>详情页结构混乱，未能有效引导用户购买决策</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg shadow-sm">
+                    <h4 class="text-xl font-semibold mb-3 text-primary-600 border-b pb-2">核心职责</h4>
+                    <ul class="list-none space-y-3 text-gray-700 dark:text-gray-300">
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 mr-3 flex-shrink-0">1</span>
+                            <span><strong class="text-gray-900 dark:text-white">信息整合：</strong>建立仿真花产品信息标准化处理框架</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 mr-3 flex-shrink-0">2</span>
+                            <span><strong class="text-gray-900 dark:text-white">内容策划：</strong>输出命名规范、提炼核心卖点、主图sku排版建议</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 mr-3 flex-shrink-0">3</span>
+                            <span><strong class="text-gray-900 dark:text-white">页面制作：</strong>根据产品输出详情框架，供设计师参考，减少修改成本</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg shadow-sm mb-8">
+                    <h4 class="text-xl font-semibold mb-4 text-primary-600 border-b pb-2">实施路径</h4>
+                    
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold mr-3 shadow-sm">1</div>
+                            <h5 class="text-lg font-medium text-gray-900 dark:text-white">信息处理环节</h5>
+                        </div>
+                        <div class="ml-13 pl-8 border-l-2 border-primary-200">
+                            <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-primary-400 mt-2 mr-3 flex-shrink-0"></span>
+                                    <span>建立仿真花产品信息标准化录入模板，涵盖花型、材质、尺寸等关键参数</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-primary-400 mt-2 mr-3 flex-shrink-0"></span>
+                                    <span>形成结构化的仿真花产品信息数据库，支持后续内容创作</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold mr-3 shadow-sm">2</div>
+                            <h5 class="text-lg font-medium text-gray-900 dark:text-white">内容策划阶段</h5>
+                        </div>
+                        <div class="ml-13 pl-8 border-l-2 border-primary-200">
+                            <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-primary-400 mt-2 mr-3 flex-shrink-0"></span>
+                                    <div>
+                                        <span class="font-medium text-gray-900 dark:text-white">命名规范：</span>
+                                        <span>基于花卉特性及应用场景，生成系列化命名（如"四季常青系列"）</span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-primary-400 mt-2 mr-3 flex-shrink-0"></span>
+                                    <div>
+                                        <span class="font-medium text-gray-900 dark:text-white">卖点提炼：</span>
+                                        <span>提炼 3~5 个核心卖点，突出材质、工艺及场景适用性</span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-primary-400 mt-2 mr-3 flex-shrink-0"></span>
+                                    <div>
+                                        <span class="font-medium text-gray-900 dark:text-white">排版方案：</span>
+                                        <span>输出主图及 SKU 排版方案，确保风格统一且吸引力强</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold mr-3 shadow-sm">3</div>
+                            <h5 class="text-lg font-medium text-gray-900 dark:text-white">页面制作阶段</h5>
+                        </div>
+                        <div class="ml-13 pl-8 border-l-2 border-primary-200">
+                            <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-primary-400 mt-2 mr-3 flex-shrink-0"></span>
+                                    <div>
+                                        <span class="font-medium text-gray-900 dark:text-white">详情页框架：</span>
+                                        <span>输出详情页结构，包括品牌理念、产品亮点、使用场景等</span>
+                                    </div>
+                     
+                           
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 rounded-full bg-primary-400 mt-2 mr-3 flex-shrink-0"></span>
+                                    <div>
+                                        <span class="font-medium text-gray-900 dark:text-white">设计师协作：</span>
+                                        <span>提供可直接套用的模板，减少返工率</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg shadow-sm">
+                    <h4 class="text-xl font-semibold mb-3 text-primary-600 border-b pb-2">项目成果</h4>
+                    <ul class="list-none space-y-3 text-gray-700 dark:text-gray-300">
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600 mr-3 flex-shrink-0">✓</span>
+                            <span><strong class="text-gray-900 dark:text-white">效率提升：</strong>新品上架周期缩短 1—2天</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600 mr-3 flex-shrink-0">✓</span>
+                            <span><strong class="text-gray-900 dark:text-white">成本降低：</strong>跨部门沟通成本降低 50%+，减少了人力成本和时间成本</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-600 mr-3 flex-shrink-0">✓</span>
+                            <span><strong class="text-gray-900 dark:text-white">标准体系：</strong>建立可持续的新品上架流程，包括命名规范、卖点提炼方法及详情页模板</span>
+                        </li>
+                    </ul>
+                </div>
+                 <div class="overflow-hidden rounded-lg shadow-md">
+                        <a target='_blank'><img src='https://i.postimg.cc/6QTccKqh/20250410230952.png' border='0' alt='20250410230952'/></a>
+                </div>
+  <div class="overflow-hidden rounded-lg shadow-md">
+                <a   target='_blank'><img src='https://i.postimg.cc/Gpb4SNrP/12.png' border='0' alt='12'/></a>
+ </div>
+  <div class="overflow-hidden rounded-lg shadow-md w-full">
+<a  target='_blank'><img src='https://i.postimg.cc/BvfrYsXH/32.png' border='0' alt='32'/></a><a   target='_blank'><img src='https://i.postimg.cc/RVnpjyrR/302.png' border='0' alt='302'/></a>
+</div>
+
+  <div class="overflow-hidden rounded-lg shadow-md">
+               <a  target='_blank'><img src='https://i.postimg.cc/tgJMvf29/20250410231056.png' border='0' alt='20250410231056'/></a>
+ </div>
+
+                <div class="mt-8 text-center">
+                    <a href="#" class="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-md">
+                        查看完整项目详情
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        `
+    },
+
+
+  "xiaohongshu": {
+        title: "AI 批量 | 飞书+Deepseek 内容批量生成",
+        content: `
+            <div class="space-y-6">
+                <div class="bg-white dark:bg-gray-900 p-5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h4 class="text-xl font-semibold mb-3 text-black dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">项目背景</h4>
+                    <p class="text-gray-800 dark:text-gray-300">负责开发仿真花产品内容智能生成平台，解决传统人工撰写营销内容（小红书文案、直播话术）效率低、质量不稳定的问题。</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-900 p-5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h4 class="text-xl font-semibold mb-3 text-black dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">核心职责</h4>
+                    
+                    <div class="mb-5">
+                        <div class="flex items-center mb-3">
+                            <div class="w-7 h-7 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-medium mr-3 text-sm">1</div>
+                            <h5 class="text-lg font-medium text-black dark:text-white">数据库搭建</h5>
+                        </div>
+                        <div class="ml-10 pl-4 border-l border-gray-300 dark:border-gray-700">
+                            <ul class="space-y-2 text-gray-700 dark:text-gray-400">
+                                <li class="flex items-start">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-black dark:bg-white mt-2 mr-2 flex-shrink-0"></span>
+                                    <span>设计并搭建飞书多维表格产品信息库，包含产品图片、名称、规格、主花材、配色、适用场景、价格等维度</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-center mb-3">
+                            <div class="w-7 h-7 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-medium mr-3 text-sm">2</div>
+                            <h5 class="text-lg font-medium text-black dark:text-white">内容生成模块</h5>
+                        </div>
+                        <div class="ml-10 pl-4 border-l border-gray-300 dark:border-gray-700">
+                            <ul class="space-y-2 text-gray-700 dark:text-gray-400">
+                                <li class="flex items-start">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-black dark:bg-white mt-2 mr-2 flex-shrink-0"></span>
+                                    <span>关联DeepSeek 大模型，撰写小红书内容和直播话术的提示词</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-black dark:bg-white mt-2 mr-2 flex-shrink-0"></span>
+                                    <div>
+                                        <span class="font-medium text-black dark:text-white">针对不同场景定制生成策略：</span>
+                                        <div class="mt-2 ml-4 space-y-2">
+                                            <div class="flex items-start">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-gray-400 mt-2 mr-2 flex-shrink-0"></span>
+                                                <span><strong class="text-black dark:text-white">小红书：</strong>标题、正文、标签、配图建议</span>
+                                            </div>
+                                            <div class="flex items-start">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-gray-400 mt-2 mr-2 flex-shrink-0"></span>
+                                                <span><strong class="text-black dark:text-white">直播话术：</strong>开场白、产品介绍、卖点突出、互动话术</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 p-5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h4 class="text-xl font-semibold mb-3 text-black dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2">项目成果</h4>
+                    <ul class="list-none space-y-3 text-gray-700 dark:text-gray-400">
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-sm bg-black dark:bg-white text-white dark:text-black mr-3 flex-shrink-0 text-xs">✓</span>
+                            <span><strong class="text-black dark:text-white">效率提升：</strong>内容生产效率提升，实现SKU级批量内容生成</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-sm bg-black dark:bg-white text-white dark:text-black mr-3 flex-shrink-0 text-xs">✓</span>
+                            <span><strong class="text-black dark:text-white">时间节约：</strong>将内容制作周期从3天优化至1天</span>
+                        </li>
+                    </ul>
+                </div>
+                
+               <div class="overflow-hidden rounded-lg shadow-md">
+               <a   target='_blank'><img src='https://i.postimg.cc/K8hNMYKX/20250410234621.png' border='0' alt='20250410234621'/></a>
+ </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <a href="#" class="inline-flex items-center justify-center px-6 py-2.5 bg-black text-white dark:bg-white dark:text-black rounded-md hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-sm border border-transparent">
+                        查看完整项目详情
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        `
+    },
+
+
+   "comments": {
+        title: "AI 客服 | 评论话术",
+        content: `
+            <div class="space-y-6">
+              <a   target='_blank'><img src='https://i.postimg.cc/4ypYSLK8/20250411090119.jpg' border='0'  alt="评论话术" class="w-full h-64 object-cover rounded-lg mb-4"/></a>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                    <p class="text-gray-700 dark:text-gray-300">淘宝电商运营中面临评价管理效率低下问题，具体痛点包括：</p>
+<p class="text-gray-700 dark:text-gray-300">客服回复耗时长（人力成本高）、好评内容同质化严重、差评处理不及时影响店铺评分，以及产品特性多样（材质/款式/场景）需定制化回应。</p>
+                </div>
+                <div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">参与项目</h4>
+    
+    <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
+        <li>基于Coze搭建评价生成模块工作流</li>
+      
+            <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-6 mt-2">
+                <li>好评生成器（含情感表达模块）</li>
+                <li>差评回复（针对性解决方案+补偿策略建议）</li>
+                <li>客服对话辅助工具（专业知识支持+情绪识别）</li>
+            </ul>
+        </li>
+        <li>统筹数据采集与竞品分析工作</li>
+    </ul>
+</div>
+
+<div class="mb-6">
+    <h4 class="text-lg font-semibold mb-3">实施路径</h4>
+    
+    <div class="relative">
+        <!-- 左侧连接线 -->
+        <div class="absolute left-4 top-6 bottom-6 w-0.5 bg-gray-300 dark:bg-gray-600"></div>
+        
+        <div class="mb-6 relative">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-4 z-10 border border-gray-300 dark:border-gray-600">
+                    <span class="font-bold">1</span>
+                </div>
+                <div class="w-full">
+                    <p class="block mb-2 font-medium">数据基建阶段</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
+                        <li>整理历史评价建立分类体系</li>
+                        <li>构建仿真花专业知识库（材质/工艺/保养）</li>
+                        <li>分析TOP10竞品店铺回复策略</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-6 relative">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-4 z-10 border border-gray-300 dark:border-gray-600">
+                    <span class="font-bold">2</span>
+                </div>
+                <div class="w-full">
+                    <p class="block mb-2 font-medium">系统开发阶段</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
+                        <li>搭建产品属性表单（花型/材质/颜色等12个参数）</li>
+                        <li>开发多风格评价模板（7种情感表达模式）</li>
+            
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+           </div>
+</div>
+  <div class="overflow-hidden rounded-lg shadow-md">
+    <a   target='_blank'><img src='https://i.postimg.cc/vZxz1V8t/image-1.png' border='0' alt='image-1'/></a>
+<a   target='_blank'><img src='https://i.postimg.cc/D0YNh35v/image-2.png' border='0' alt='image-2'/></a>
+<a  target='_blank'><img src='https://i.postimg.cc/CM6rzYHY/image-4.png' border='0' alt='image-4'/></a>
+ </div>
+                
+
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+            </div>
+        `
+    },
+
+    "livestream": {
+        title: "AI辅助 | 直播话术",
+        content: `
+            <div class="space-y-6">
+                <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="直播话术" class="w-full h-64 object-cover rounded-lg mb-4">
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">项目背景</h4>
+                    <p class="text-gray-700 dark:text-gray-300">通过Coze+多维表格创建直播话术生成工作流，系统化输出适配不同产品的直播话术模板。该项目旨在提升直播销售效率，保持话术质量一致性。</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">系统设计</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                        <li><strong>话术框架设计：</strong> 构建包含开场、产品介绍、卖点强调、互动环节、促销话术等模块</li>
+                        <li><strong>产品参数化：</strong> 设计产品信息录入模板，实现话术的自动适配</li>
+                        <li><strong>情境化话术：</strong> 根据不同直播场景（如首次上新、促销活动、节日特辑）生成针对性话术</li>
+                        <li><strong>互动问答库：</strong> 预设常见问题回答，支持直播互动环节</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">项目成果</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                        <li>直播话术准备时间缩短75%</li>
+                        <li>直播间用户留存率提升20%</li>
+                        <li>产品转化率平均提升25%</li>
+                        <li>建立了包含200+模板的话术库，支持快速调用</li>
+                    </ul>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mt-6">
+                    <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80" alt="直播场景" class="w-full h-40 object-cover rounded-lg">
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="话术模板" class="w-full h-40 object-cover rounded-lg">
+                </div>
+<div class="mt-6 text-center">
+                            <a href="#" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                查看完整项目详情
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+            </div>
+        `
+    }
+};
+
+// 添加工作详情按钮点击事件
+document.querySelectorAll('[data-job]').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const jobKey = this.getAttribute('data-job');
+        const job = jobDetails[jobKey] || {
+            title: this.textContent.trim(),
+            content: `<p class="text-gray-700 dark:text-gray-300">详细内容正在准备中...</p>`
+        };
+        
+        jobModalTitle.textContent = job.title;
+        jobModalContent.innerHTML = job.content;
+        jobModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+// 关闭工作详情模态框
+closeJobModal.addEventListener('click', () => {
+    jobModal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+});
+
+// 点击工作模态框外部关闭
+jobModal.addEventListener('click', (e) => {
+    if (e.target === jobModal) {
+        jobModal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+});
+
+
+
+        // 打开项目模态框
+        projectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const projectId = card.getAttribute('data-project');
+                const project = projectDetails[projectId] || {
+                    title: card.querySelector('h4').textContent,
+                    content: `<p class="text-gray-700 dark:text-gray-300">详细内容正在准备中...</p>`
+                };
+                
+                modalTitle.textContent = project.title;
+                modalContent.innerHTML = project.content;
+                projectModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // 关闭项目模态框
+        closeModal.addEventListener('click', () => {
+            projectModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // 点击模态框外部关闭
+        projectModal.addEventListener('click', (e) => {
+            if (e.target === projectModal) {
+                projectModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>
+
+
